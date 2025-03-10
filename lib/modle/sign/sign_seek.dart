@@ -158,6 +158,7 @@ class _Sign_seekState extends State<Sign_seek> {
                     _showSuccessDialog(context);
                     print(shared?.getString("id_seek"));
                     print(shared?.getString("token_seek"));
+                   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (builder) => Home()));
 
                   }
                 },
