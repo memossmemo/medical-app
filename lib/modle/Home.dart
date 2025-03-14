@@ -83,8 +83,8 @@ class _hoState extends State<Homepage> {
                   children: [
 
                     InkWell(onTap: (){
-                      // Navigator.of(context).push(
-                      //     MaterialPageRoute(builder: (context) => doctor()));
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => doctor()));
                     },
                       child: Stack(
                           alignment: Alignment.center,

@@ -3,12 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:triaq/main.dart';
-import 'package:triaq/view/Api/spec_Api.dart';
-import 'package:triaq/view/variables.dart';
-import 'Login/login_analyst.dart';
-import 'Login/login_doctor.dart';
 import 'Login/login.dart';
-import 'Login/login_xray.dart';
 
 class time extends StatefulWidget {
   @override
@@ -25,9 +20,7 @@ class _TimeState extends State<time> {
   }
 
   Future<String> _checkApprovalStatus() async {
-
-    final response =
-      await http.post(
+    final response = await http.post(
       Uri.parse(
           'https://pharma-manager-copy-2.onrender.com/api/${shared?.getString("spec")}/isApproved${shared?.getString("spec")}'),
       headers: {"Content-Type": "application/json"},
@@ -39,25 +32,28 @@ class _TimeState extends State<time> {
 
     if (response.statusCode == 201) {
       final data = jsonDecode(response.body);
-      return data['message'];
+      return  "user is  approved sucessfully!";
     } else {
-      return 'Error checking approval status';
-    }
+      return  " الرجاء الانتظار";    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Waiting for Approval')),
+      appBar: AppBar(title: Text('صفحة الانتظار')),
       body: FutureBuilder<String>(
         future: _approvalStatus,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
+            print("${snapshot.data}//////////////////////////////////////");
+
             return Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            print("${snapshot.data}//////////////////////////////////////");
+
+            return Center(child: Text('يوجد خطا'));
           }
 
           // طباعة قيمة snapshot.data للتحقق من محتواها
@@ -65,19 +61,18 @@ class _TimeState extends State<time> {
 
           // تحقق من القيمة التي يعيدها الخادم
           if (snapshot.data == 'user is  approved sucessfully!') {
-            // تأجيل التنقل حتى اكتمال بناء الصفحة
+            print("${snapshot.data}//////////////////////////////////////");
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (shared?.getString("spec") != null) {
+              Future.delayed(Duration(milliseconds: 500), () {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => Login()),
                 );
-              }
-              shared?.setInt("select", 0);
+              });
             });
           }
-
-          return Center(child: Text(snapshot.data ?? ''));
+// shared?.setInt("select", 0);
+          return Center(child: Text("انتظر لتتم الموافقة" ?? ''));
         },
       ),
     );

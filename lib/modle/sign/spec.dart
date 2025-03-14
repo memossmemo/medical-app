@@ -43,7 +43,7 @@ class _SpecState extends State<Spec> {
   }
 
   bool isArabicAlphabet(String input) {
-    // التعبير المنتظم للتحقق من أن النص يحتوي فقط على حروف أبجدية عربية
+    // تعبير منتظم للتحقق من أن النص يحتوي فقط على الحروف العربية والمسافات
     final regExp = RegExp(r'^[\u0600-\u06FF\s]+$');
     return regExp.hasMatch(input);
   }
@@ -366,7 +366,7 @@ class _SpecState extends State<Spec> {
       return Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
-          title: Text("doctor"),
+          title: Text("دكتور"),
         ),
         body: SingleChildScrollView(
           child: Form(

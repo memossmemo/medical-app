@@ -130,12 +130,7 @@ class _pharmaState extends State<xray> {
         actions: [
           IconButton(onPressed: () {}, icon: Icon(Icons.search_rounded))
         ],
-        title: Text("مركز الاشعة"),leading: Column(
-        children: [
-          Text('الاقسام', style: TextStyle()),
-          Icon(Icons.arrow_back),
-        ],
-      ),
+        title: Text("مركز الاشعة")
       ),
       body: Container(
         child: Column(

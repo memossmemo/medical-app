@@ -16,8 +16,8 @@ class Sign_seek extends StatefulWidget {
 
 class _Sign_seekState extends State<Sign_seek> {
   bool isArabicAlphabet(String input) {
-    // التعبير المنتظم للتحقق من أن النص يحتوي فقط على حروف أبجدية عربية
-    RegExp regExp = RegExp(r'^[\u0621-\u064A]+$');
+    // تعبير منتظم للتحقق من أن النص يحتوي فقط على الحروف العربية والمسافات
+    final regExp = RegExp(r'^[\u0600-\u06FF\s]+$');
     return regExp.hasMatch(input);
   }
   void showDialogError() {
@@ -156,9 +156,7 @@ class _Sign_seekState extends State<Sign_seek> {
                   } else {
                    await api.register_seek();
                     _showSuccessDialog(context);
-                    print(shared?.getString("id_seek"));
-                    print(shared?.getString("token_seek"));
-                   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (builder) => Home()));
+                   // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (builder) => Home()));
 
                   }
                 },

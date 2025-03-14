@@ -156,7 +156,7 @@ class _LoginState extends State<Login> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: Text(" wwتسجيل الدخول"),
+        title: Text("تسجيل الدخول"),
       ),
       body: SingleChildScrollView(
         child: Form(

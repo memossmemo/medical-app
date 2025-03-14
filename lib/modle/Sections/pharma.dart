@@ -26,49 +26,13 @@ class pharma extends StatefulWidget {
 }
 
 class _pharmaState extends State<pharma> {
-  ///////////////////////////////////////////////////////////////////////////////////
-  // double _rating = 0.0; // القيمة الافتراضية
-  // bool _isLoading = true;
 
-// 🌍 دالة لجلب التقييم من API
-//   Future<void> fetchRating() async {
-//     String url =
-//         'https://pharma-manager-copy-2.onrender.com/api/Pharmatic/final-rate-pharmacy/${shared?.getString("id")}';
-//
-//     try {
-//       var response = await http.get(Uri.parse(url));
-//
-//       if (response.statusCode == 200) {
-//         var data = jsonDecode(response.body);
-//         print(data);
-//         setState(() {
-//           _rating = (data['finalRate'] ?? 0.0).toDouble();
-//           _isLoading = false;
-//         });
-//       } else {
-//         print("فشل في جلب التقييم: ${response.statusCode}");
-//         setState(() {
-//           _isLoading = false;
-//         });
-//       }
-//     } catch (e) {
-//       print("خطأ أثناء الاتصال بـ API: $e");
-//       setState(() {
-//         _isLoading = false;
-//       });
-//     }
-//   }
-//
-//   void initState() {
-//     super.initState();
-//     print(shared?.getString("id"));
-//     fetchRating(); // جلب التقييم عند تشغيل التطبيق
-//   }
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   bool _isUploading = false;
+
   Future<void> _uploadImage() async {
     if (_image == null) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("يرجى اختيار صورة أولاً")));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("يرجى اختيار صورة أولاً")));
       return;
     }
 
@@ -76,29 +40,35 @@ class _pharmaState extends State<pharma> {
       _isUploading = true;
     });
 
-    var url = Uri.parse( 'https://pharma-manager-copy-2.onrender.com/api/Pharmatic/send-request/${shared?.getString("id_seek")}/${shared?.getString("city")}/${shared?.getString("region")}');
+    var url = Uri.parse(
+        'https://pharma-manager-copy-2.onrender.com/api/Pharmatic/send-request/${shared?.getString("id_seek")}/${shared?.getString("city")}/${shared?.getString("region")}');
     var request = http.MultipartRequest("POST", url);
 
     // إضافة الصورة إلى الطلب
-    var file = await http.MultipartFile.fromPath("image", _image!.path, filename: p.basename(_image!.path));
+    var file = await http.MultipartFile.fromPath("image", _image!.path,
+        filename: p.basename(_image!.path));
     request.files.add(file);
 
     try {
       var response = await request.send();
       if (response.statusCode == 201) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("تم رفع الصورة بنجاح!")));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("تم رفع الصورة بنجاح!")));
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("فشل رفع الصورة")));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("فشل رفع الصورة")));
       }
     } catch (e) {
       print("خطأ أثناء رفع الصورة: $e");
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("حدث خطأ أثناء رفع الصورة")));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("حدث خطأ أثناء رفع الصورة")));
     } finally {
       setState(() {
         _isUploading = false;
       });
     }
   }
+
   final ImagePicker _picker = ImagePicker();
   XFile? _image; // المتغير الذي يخزن الصورة
   // دالة لالتقاط صورة باستخدام الكاميرا
@@ -110,6 +80,7 @@ class _pharmaState extends State<pharma> {
       _uploadImage();
     });
   }
+
   // دالة لعرض خيارات المصدر
   void _showPickerDialog() {
     showModalBottomSheet(
@@ -123,7 +94,8 @@ class _pharmaState extends State<pharma> {
               onTap: () {
                 Navigator.pop(context);
                 _pickImage(ImageSource.camera);
-                print("//////////////////////////////////////////////////////////////////////${_image?.path}");
+                print(
+                    "//////////////////////////////////////////////////////////////////////${_image?.path}");
               },
             ),
             ListTile(
@@ -172,19 +144,13 @@ class _pharmaState extends State<pharma> {
           IconButton(onPressed: () {}, icon: Icon(Icons.search_rounded))
         ],
         title: Text("الصيدليات"),
-        leading: Column(
-          children: [
-            Text('الاقسام', style: TextStyle()),
-            Icon(Icons.arrow_back),
-          ],
-        ),
       ),
       body: Container(
         child: Column(
           children: [
             InkWell(
-              onTap: ()  {
-               _showPickerDialog();
+              onTap: () {
+                _showPickerDialog();
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -370,171 +336,3 @@ class _pharmaState extends State<pharma> {
     );
   }
 }
-//"${await shared?.getString("city")}"
-//"${await shared?.getString("address")}"
-/*
-FutureBuilder<Map<String,dynamic>>(
-        future: fetchData(
-            "${shared?.getString("city")}", "${shared?.getString("address")}"),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('حدث خطأ'));
-          } else {
-            return ListView.builder(
-              itemCount: snapshot.data!["findPharma"].length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 10,bottom: 10,left: 30,right: 30),
-                  child: Card(
-                    elevation: 10,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(25),
-                      child: Column(
-                        children: [
-                          // اسم الصيدلية
-                          Text(
-                            " صيدلية : ${snapshot.data!["findPharma"][index]["fullName"]}",
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blueAccent,
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          Row(
-
-                            children: [
-                              Icon(Icons.location_disabled, color: Colors.green),
-                              SizedBox(width: 8),
-                              Text(
-                                "الدقهلية/دكرنس/شارع الحمراء",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ],
-
-
-                          ),SizedBox(height: 20),
-                          Row(
-
-                            children: [
-                              Icon(Icons.access_time, color: Colors.orange),
-                              SizedBox(width: 8),
-                              Text(
-                                'من: ${snapshot.data!["findPharma"][index]["StartJob"]}',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              SizedBox(width: 16),
-                              Text(
-                                'إلى: ${snapshot.data!["findPharma"][index]["EndJob"]}',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 25),
-                          // رقم الهاتف
-                          Row(
-mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Icon(Icons.phone, color: Colors.green),
-                              SizedBox(width: 8),
-                              Text(
-                                "${snapshot.data!["findPharma"][index]["phone"]}",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 16),
-
-                          // مواعيد العمل
-
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            );
-          }
-        },
-      ),
-*/
-/*
-Center(
-            child: Card(
-              elevation: 10,
-              shadowColor: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Icon(
-                      Icons.local_pharmacy,
-                      size: 50,
-                      color: Colors.blue,
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      'صيدلية الصحة والعافية',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'العنوان: دمياط/دكرنس/شارع الكمال',
-                      style: TextStyle(fontSize: 16, color: Colors.black54),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'مواعيد العمل : من 3 الى 9 ما عدا الجمعة ',
-                      style: TextStyle(fontSize: 16, color: Colors.black54),
-                    ),
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Icon(Icons.star,color: Colors.yellow[600]),
-                        Icon(Icons.star,color: Colors.yellow[600]),
-                        Icon(Icons.star,color: Colors.yellow[600]),
-                        Icon(Icons.star,color: Colors.yellow[600]),
-                        Icon(Icons.star,color: Colors.yellow[600]),
-                        Container(width: 50,),
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            elevation: 10,
-
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          child: Text(
-                            'اتصل الان',
-                            style: TextStyle(fontSize: 16, color: Colors.blue),
-                          ),
-                        ),
-
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-
-
- */

@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import 'doctor_details.dart';
+
 class doctor extends StatefulWidget {
   const doctor({super.key});
 
@@ -21,12 +23,7 @@ class _doctorState extends State<doctor> {
     return Scaffold(
         appBar: AppBar(
           title: Text(' العيادات'),
-          leading: Column(
-            children: [
-              Text('الاقسام', style: TextStyle()),
-              Icon(Icons.arrow_back),
-            ],
-          ),
+
           actions: [
             IconButton(onPressed: () {}, icon: Icon(Icons.search_rounded))
           ],
@@ -147,7 +144,9 @@ class _doctorState extends State<doctor> {
                 child: MaterialButton(
                   elevation: 10,
                   color: Colors.green,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => doc()));
+                  },
                   child: Text(
                     "احجز الان",
                     style: TextStyle(color: Colors.black),
